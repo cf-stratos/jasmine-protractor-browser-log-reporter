@@ -1,6 +1,6 @@
-module.exports = function ProtractorBrowserLogReporter() {
+const chalk = require('chalk');
 
-  let moment = require('moment');
+module.exports = function ProtractorBrowserLogReporter() {
 
   this.jasmineStarted = function(suiteInfo) { }
 
@@ -23,12 +23,25 @@ module.exports = function ProtractorBrowserLogReporter() {
       if (logsEntries.length > 0) {
         console.log('\nBrowser logs for test:', result.fullName);
         logsEntries.forEach((logEntry) => {
-          let timestamp = moment(logEntry.timestamp).format('h:mm:ss');
-          console.log(timestamp, logEntry.type, logEntry.message);
-        });
+          let msg;
+          const level = `${logEntry.level}`;
+          switch(level) {
+            case 'SEVERE':
+              msg = chalk.redBright(logEntry.message);
+              break;
+            case 'WARNING':
+              msg = chalk.yellow(logEntry.message);
+              break;
+            default:
+              msg = chalk.cyan(logEntry.message);
+              break;
+            }
+            console.log(msg);
+          }
+        );
         console.log('');
       }
-    }).catch((err) => {
+    }).catch((err) => {s
       if(result.status === 'failed') {
         console.log('\nError outputting browser logs for test:', result.fullName);
         console.log(err);
