@@ -21,13 +21,13 @@ module.exports = function ProtractorBrowserLogReporter() {
     // Flush browser logs between tests. Ref: https://stackoverflow.com/questions/30582297/clear-console-log-in-browser-using-protractor
     return browser.driver.manage().logs().get('browser').then((logsEntries) => {
       if (logsEntries.length > 0) {
-        console.log('\nBrowser logs for test:', result.fullName);
+        console.log('\nBrowser logs for test: ', chalk.bgCyan(' ' + result.fullName + ' '));
         logsEntries.forEach((logEntry) => {
           let msg;
           const level = `${logEntry.level}`;
           switch(level) {
             case 'SEVERE':
-              msg = chalk.redBright(logEntry.message);
+              msg = chalk.red(logEntry.message);
               break;
             case 'WARNING':
               msg = chalk.yellow(logEntry.message);
